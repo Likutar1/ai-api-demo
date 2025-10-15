@@ -64,26 +64,29 @@
 
                 <div id="static-post-card" class="post-card p-4 rounded-xl shadow-lg bg-white border-t-8 border-t-pink-500 max-w-lg mx-auto">
                     <div class="flex items-center space-x-3 mb-3">
-                        <img src="https://placehold.co/40x40/FFC0CB/FFFFFF?text=S" 
-                             onerror="this.onerror=null;this.src='https://placehold.co/40x40/FFC0CB/FFFFFF?text=S';" 
+                        <img src="https://placehold.co/40x40/FFC0CB/FFFFFF?text=P" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/40x40/FFC0CB/FFFFFF?text=P';" 
                              class="w-10 h-10 rounded-full object-cover border-2 border-pink-400">
                         <div class="font-bold text-gray-800">
-                            manc_stag_squad
+                            cute_pup_daily
                         </div>
                         <span class="text-blue-500 text-xs ml-auto">Verified</span>
                     </div>
 
                     <div class="rounded-lg overflow-hidden border border-gray-200">
-                        <img src="https://iili.io/Key7WTx.png" 
-                             alt="A group of men celebrating a stag party in a bar, topless in black suits" 
+                        <img src="https://i.pinimg.com/736x/49/46/39/4946395db08b75dcca5e138759aa59bd.jpg" 
+                             alt="A cute, sleeping baby Golden Retriever puppy in an Instagram frame" 
                              class="w-full h-auto object-cover"
-                             onerror="this.onerror=null;this.src='https://placehold.co/500x500/ADD8E6/000000?text=Stag+Do+Post+Image+Loading+Error';">
+                             onerror="this.onerror=null;this.src='https://placehold.co/500x500/ADD8E6/000000?text=Puppy+Post+Image+Loading+Error';">
                     </div>
 
                     <div class="mt-3">
                         <div class="flex items-center space-x-4 text-2xl mb-2">
-                            <button id="like-button" class="text-red-500 hover:text-red-700 transition duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 fill-current" viewBox="0 0 24 24" width="24" height="24">
+                            <button id="like-button" class="text-gray-500 hover:text-red-500 transition duration-150">
+                                <svg id="heart-outline" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                                <svg id="heart-filled" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 hidden fill-current text-red-500" viewBox="0 0 24 24" width="24" height="24">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                             </button>
@@ -103,20 +106,9 @@
                             <span id="like-count" data-initial-likes="2500">2,500</span> likes
                         </p>
                         <p class="text-sm">
-                            <span class="font-bold text-gray-800">manc_stag_squad</span> Lads on tour in **Manchester!** Ready for a massive weekend. 🍻
+                            <span class="font-bold text-gray-800">cute_pup_daily</span> Sweet dreams are made of these. 🐾😴
                         </p>
-                        <p class="text-xs mt-1 space-x-2">
-                            <a href="https://www.instagram.com/explore/tags/ManchesterStag/" target="_blank" class="hover:underline text-blue-500">#ManchesterStag</a> 
-                            <a href="https://www.instagram.com/explore/tags/GroomSquad/" target="_blank" class="hover:underline text-blue-500">#GroomSquad</a> 
-                            <a href="https://www.instagram.com/explore/tags/MancLegend/" target="_blank" class="hover:underline text-blue-500">#MancLegend</a> 
-                            <a href="https://www.instagram.com/explore/tags/LastNightOfFreedom/" target="_blank" class="hover:underline text-blue-500">#LastNightOfFreedom</a>
-                            <a href="https://www.instagram.com/explore/tags/SendHelp/" target="_blank" class="hover:underline text-blue-500">#SendHelp</a> 
-                            <a href="https://www.instagram.com/explore/tags/TooMuchAle/" target="_blank" class="hover:underline text-blue-500">#TooMuchAle</a> 
-                            <a href="https://www.instagram.com/explore/tags/CantRememberThis/" target="_blank" class="hover:underline text-blue-500">#CantRememberThis</a> 
-                            <a href="https://www.instagram.com/explore/tags/BestMenFail/" target="_blank" class="hover:underline text-blue-500">#BestMenFail</a>
-                            <a href="https://www.instagram.com/explore/tags/StagDoUK/" target="_blank" class="hover:underline text-blue-500">#StagDoUK</a>
-                            <a href="https://www.instagram.com/explore/tags/WeddingSoon/" target="_blank" class="hover:underline text-blue-500">#WeddingSoon</a>
-                        </p>
+                        <p class="text-xs text-blue-500 mt-1">#puppynap #goldenretriever #minimalist</p>
                     </div>
 
                     <div id="comments-list" class="mt-4 pt-3 border-t border-gray-100 space-y-2">
@@ -137,7 +129,7 @@
 
                 <div id="post-form-container" class="bg-white p-6 rounded-xl shadow-lg mb-8 hidden max-w-lg mx-auto">
                     <form id="post-form" class="space-y-4">
-                        <input type="text" id="post-username" placeholder="Your Username (e.g., JaneDoe123)" value="Guest"
+                        <input type="text" id="post-username" placeholder="Your Username (e.g., JaneDoe123)" value=""
                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
                         <textarea id="post-content" rows="3" placeholder="What's on your mind? Try posting something safe, or something that violates common community guidelines for moderation demo..."
                                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150 resize-none"></textarea>
@@ -157,41 +149,30 @@
 
             <div id="admin-static-post-card" class="post-card p-4 rounded-xl shadow-lg bg-white max-w-lg mx-auto mb-8 border-t-8 border-t-green-500">
                 <div class="flex items-center space-x-3 mb-3">
-                    <img src="https://placehold.co/40x40/FFC0CB/FFFFFF?text=S" 
-                         onerror="this.onerror=null;this.src='https://placehold.co/40x40/FFC0CB/FFFFFF?text=S';" 
+                    <img src="https://placehold.co/40x40/FFC0CB/FFFFFF?text=P" 
+                         onerror="this.onerror=null;this.src='https://placehold.co/40x40/FFC0CB/FFFFFF?text=P';" 
                          class="w-10 h-10 rounded-full object-cover border-2 border-pink-400">
                     <div class="font-bold text-gray-800">
-                        manc_stag_squad
+                        cute_pup_daily
                     </div>
                     <span class="text-blue-500 text-xs ml-auto">Verified</span>
                 </div>
 
                 <div class="rounded-lg overflow-hidden border border-gray-200">
-                    <img src="https://iili.io/Key7WTx.png" 
-                         alt="A group of men celebrating a stag party in a bar, topless in black suits" 
+                    <img src="https://i.pinimg.com/736x/2f/27/f1/2f27f1e84d23cef81a758b0563fed639.jpg" 
+                         alt="A cute, sleeping baby Golden Retriever puppy in an Instagram frame" 
                          class="w-full h-auto object-cover"
-                         onerror="this.onerror=null;this.src='https://placehold.co/500x500/ADD8E6/000000?text=Stag+Do+Post+Image+Loading+Error';">
+                         onerror="this.onerror=null;this.src='https://placehold.co/500x500/ADD8E6/000000?text=Puppy+Post+Image+Loading+Error';">
                 </div>
 
                 <div class="mt-3">
                     <p class="text-sm font-semibold text-gray-700 mb-2">
-                        <span id="admin-like-count">2,500</span> likes (Current Tally)
+                        2,500 likes (Initial count)
                     </p>
                     <p class="text-sm">
-                        <span class="font-bold text-gray-800">manc_stag_squad</span> Lads on tour in **Manchester!** Ready for a massive weekend. 🍻
+                        <span class="font-bold text-gray-800">cute_pup_daily</span> Sweet dreams are made of these. 🐾😴
                     </p>
-                    <p class="text-xs mt-1 space-x-2">
-                        <a href="https://www.instagram.com/explore/tags/ManchesterStag/" target="_blank" class="hover:underline text-blue-500">#ManchesterStag</a> 
-                        <a href="https://www.instagram.com/explore/tags/GroomSquad/" target="_blank" class="hover:underline text-blue-500">#GroomSquad</a> 
-                        <a href="https://www.instagram.com/explore/tags/MancLegend/" target="_blank" class="hover:underline text-blue-500">#MancLegend</a> 
-                        <a href="https://www.instagram.com/explore/tags/LastNightOfFreedom/" target="_blank" class="hover:underline text-blue-500">#LastNightOfFreedom</a>
-                        <a href="https://www.instagram.com/explore/tags/SendHelp/" target="_blank" class="hover:underline text-blue-500">#SendHelp</a> 
-                        <a href="https://www.instagram.com/explore/tags/TooMuchAle/" target="_blank" class="hover:underline text-blue-500">#TooMuchAle</a> 
-                        <a href="https://www.instagram.com/explore/tags/CantRememberThis/" target="_blank" class="hover:underline text-blue-500">#CantRememberThis</a> 
-                        <a href="https://www.instagram.com/explore/tags/BestMenFail/" target="_blank" class="hover:underline text-blue-500">#BestMenFail</a>
-                        <a href="https://www.instagram.com/explore/tags/StagDoUK/" target="_blank" class="hover:underline text-blue-500">#StagDoUK</a>
-                        <a href="https://www.instagram.com/explore/tags/WeddingSoon/" target="_blank" class="hover:underline text-blue-500">#WeddingSoon</a>
-                    </p>
+                    <p class="text-xs text-blue-500 mt-1">#puppynap #goldenretriever #minimalist</p>
                     
                     <div id="admin-static-log-details" class="pt-3 border-t border-gray-100 mt-3 space-y-1">
                         </div>
@@ -212,10 +193,10 @@
 
         // --- GLOBAL SETUP ---
         /**
-         * Log data for the static media post, used only for the Admin Log display.
+         * Log data for the static media post, used only for the Admin Log display. (Point 3 cleanup)
          */
         const STATIC_MEDIA_POST_LOG = {
-            username: "manc_stag_squad (Media Post)",
+            username: "cute_pup_daily (Media Post)",
             timestamp: new Date(Date.now() - 3600000), // An hour ago
             moderation: {
                 is_safe: true,
@@ -241,10 +222,14 @@
 
         // Elements for static post interaction
         const likeButton = document.getElementById('like-button');
-        const likeCountSpan = document.getElementById('like-count'); // Public Feed Tally
-        const adminLikeCountSpan = document.getElementById('admin-like-count'); // Admin Log Tally
+        const likeCountSpan = document.getElementById('like-count');
         const commentButton = document.getElementById('comment-button');
         
+        // START: Heart Icon FIX (Request 1) - New element references
+        const heartOutline = document.getElementById('heart-outline');
+        const heartFilled = document.getElementById('heart-filled');
+        // END: Heart Icon FIX 
+
         // New element reference for inserting comments
         const commentsList = document.getElementById('comments-list');
 
@@ -316,7 +301,6 @@
 
         /**
          * Handles incrementing the like count on the static post.
-         * Updates both public and admin tallies.
          */
         function handleLikeClick() {
             if (likeButton.classList.contains('liked')) {
@@ -326,23 +310,21 @@
             let currentLikes = parseInt(currentLikesText) || 0;
             currentLikes += 1;
             
-            const newLikesText = currentLikes.toLocaleString('en-GB');
-            
-            // Update Public Tally
-            likeCountSpan.textContent = newLikesText; 
-            
-            // Update Admin Tally (Shared Increment)
-            if (adminLikeCountSpan) {
-                adminLikeCountSpan.textContent = newLikesText;
-            }
+            likeCountSpan.textContent = currentLikes.toLocaleString('en-GB');
 
             likeButton.classList.add('liked'); 
-            likeButton.classList.add('scale-125', 'text-red-700');
-            likeButton.classList.remove('text-red-500');
+            
+            // START: Heart Icon FIX (Request 1) - Toggle icons
+            heartOutline.classList.add('hidden');
+            heartFilled.classList.remove('hidden');
+
+            // Apply animation classes to the filled icon
+            heartFilled.classList.add('scale-125');
 
             setTimeout(() => {
-                likeButton.classList.remove('scale-125');
+                heartFilled.classList.remove('scale-125');
             }, 150);
+            // END: Heart Icon FIX 
         }
 
         /**
@@ -517,18 +499,22 @@
                 return;
             }
 
-            const rawUsername = postUsernameInput.value.trim() || 'Guest'; // Raw for AI moderation and Admin Log
-            const rawPostContent = postContentInput.value.trim(); // Raw for AI moderation and Admin Log
+            // START: Validation and Username Fix (Request 3 & 2)
+            const rawUsername = postUsernameInput.value.trim(); // Now pulls an empty string if nothing entered
+            const rawPostContent = postContentInput.value.trim(); 
             
             if (rawUsername.length < 1) {
                 showMessage('warning', 'Username Required', "Please enter a username.");
+                postUsernameInput.focus();
                 return;
             }
 
             if (rawPostContent.length < 1) { 
-                showMessage('warning', 'Post Too Short', "Please write a longer post (minimum 1 character).");
+                showMessage('warning', 'Comment Required', "Please enter a comment before posting.");
+                postContentInput.focus();
                 return;
             }
+            // END: Validation and Username Fix 
             
             submitButton.disabled = true;
             loadingIndicator.style.display = 'flex';
@@ -570,7 +556,14 @@
                         `Your comment was blocked due to: ${moderationResult.moderator_comment}`, 
                         moderationResult.categories_flagged
                     );
-                } 
+                } else if (currentView === 'public' && isSafe) {
+                     showMessage(
+                        'success', 
+                        'Comment Approved', 
+                        `Your comment was instantly approved and posted to the public feed.`, 
+                        []
+                    );
+                }
                 
                 // 4. Re-render both feeds 
                 renderPosts(sessionPosts);
