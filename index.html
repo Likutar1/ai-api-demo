@@ -83,10 +83,7 @@
                     <div class="mt-3">
                         <div class="flex items-center space-x-4 text-2xl mb-2">
                             <button id="like-button" class="text-gray-500 hover:text-red-500 transition duration-150">
-                                <svg id="heart-outline" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                                </svg>
-                                <svg id="heart-filled" xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 hidden fill-current text-red-500" viewBox="0 0 24 24" width="24" height="24">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 fill-current" viewBox="0 0 24 24" width="24" height="24">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                                 </svg>
                             </button>
@@ -189,11 +186,13 @@
 
     <script type="module">
         // --- API KEY CONFIGURATION ---
-        // NOTE: If you are using Vercel, this key should be REMOVED and retrieved securely on the server side.
-        // Since the migration requires a client-side file, this placeholder remains for local testing.
         const API_KEY = "AIzaSyCDuWhLwFqRc62Yx_uTydebngEJmDAzl0Q"; 
 
         // --- GLOBAL SETUP ---
+        /**
+         * Log data for the static media post, used only for the Admin Log display. 
+         * STAG THEME RESTORED HERE.
+         */
         const STATIC_MEDIA_POST_LOG = {
             username: "wildlife_watcher (Media Post)",
             timestamp: new Date(Date.now() - 3600000), 
@@ -223,10 +222,7 @@
         const likeCountSpan = document.getElementById('like-count');
         const commentButton = document.getElementById('comment-button');
         
-        // Heart Icon Elements
-        const heartOutline = document.getElementById('heart-outline');
-        const heartFilled = document.getElementById('heart-filled');
-        
+        // New element reference for inserting comments
         const commentsList = document.getElementById('comments-list');
 
         // Message Box elements
@@ -246,35 +242,56 @@
         const navPublic = document.getElementById('nav-public');
         const navAdmin = document.getElementById('nav-admin');
 
+        // Stores ALL attempted posts for the in-session log (disappears on refresh)
         let sessionPosts = []; 
         let currentView = 'public'; 
 
-        // Mock list of words to censor for demonstration
+        // Mock list of words to censor for demonstration (Case-insensitive)
         const PROFANITY_LIST = [
             'darn', 'heck', 'shoot', 'crap', 'bummer', 'frick', 'naughtyword',
+            // Added strong language terms for censorship enforcement
             'fuck', 'fucker', 'fucking', 'shit', 'asshole', 'bastard', 'bitch'
         ];
 
         // --- UTILITY FUNCTIONS ---
 
+        /**
+         * Generates a random IPv4 address string for a mock demonstration.
+         */
         function generateMockIP() {
             return Array(4).fill(0).map(() => Math.floor(Math.random() * 255)).join('.');
         }
 
+        /**
+         * Censors strong language in a given string by replacing words in PROFANITY_LIST with 
+         * the first letter followed by asterisks (e.g., F****).
+         */
         function censorText(text) {
             let censored = text;
             PROFANITY_LIST.forEach(word => {
+                // Regex: Match start boundary (\b) followed by the word.
                 const regex = new RegExp(`\\b${word}`, 'gi');
+                
+                // Use a function for replacement to access the matched string (match)
                 censored = censored.replace(regex, (match) => {
+                    // Safety check for empty or single-character matches
                     if (match.length <= 1) return match; 
+                    
+                    // Preserve the case of the original first letter (e.g., 'F' from 'Fucker')
                     const firstLetter = match.charAt(0);
+                    
+                    // Create asterisks for the rest of the word
                     const asterisks = '*'.repeat(match.length - 1);
+                    
                     return firstLetter + asterisks;
                 });
             });
             return censored;
         }
 
+        /**
+         * Handles incrementing the like count on the static post.
+         */
         function handleLikeClick() {
             if (likeButton.classList.contains('liked')) {
                 return;
@@ -286,18 +303,18 @@
             likeCountSpan.textContent = currentLikes.toLocaleString('en-GB');
 
             likeButton.classList.add('liked'); 
-            
-            // FIX: Toggle heart icons (Request 1)
-            heartOutline.classList.add('hidden');
-            heartFilled.classList.remove('hidden');
-
-            heartFilled.classList.add('scale-125');
+            // Change color and scale to represent a like
+            likeButton.classList.add('scale-125', 'text-red-500'); 
+            likeButton.classList.remove('text-gray-500');
 
             setTimeout(() => {
-                heartFilled.classList.remove('scale-125');
+                likeButton.classList.remove('scale-125');
             }, 150);
         }
 
+        /**
+         * Toggles the visibility of the comment form and focuses on the input.
+         */
         function handleCommentClick() {
             if (currentView === 'public') {
                 postFormContainer.classList.toggle('hidden');
@@ -311,7 +328,12 @@
             }
         }
 
+
+        /**
+         * Shows a custom message box instead of using alert().
+         */
         function showMessage(type, title, body, categories = []) {
+            // Remove previous colours and add classes
             messageBox.classList.remove('hidden', 'bg-red-200', 'bg-yellow-200', 'bg-green-200', 'bg-red-400');
             messageBox.classList.add(type === 'error' ? 'bg-red-200' : type === 'warning' ? 'bg-yellow-200' : 'bg-green-200');
             
@@ -331,6 +353,9 @@
             dismissButton.style.color = type === 'error' ? '#b91c1c' : type === 'warning' ? '#b45309' : '#059669';
         }
 
+        /**
+         * Retries a fetch request with exponential backoff.
+         */
         async function tryCatchFetch(url, options, maxRetries = 5) {
             for (let i = 0; i < maxRetries; i++) {
                 try {
@@ -351,10 +376,14 @@
             }
         }
 
+        /**
+         * Handles view switching based on URL hash.
+         */
         function handleViewChange() {
             const hash = window.location.hash.replace('#', '');
             currentView = (hash === 'admin') ? 'admin' : 'public';
             
+            // UI Switching
             publicViewContainer.classList.add('hidden');
             adminViewContainer.classList.add('hidden');
             navPublic.classList.remove('bg-blue-600', 'text-white', 'bg-gray-100', 'text-gray-700');
@@ -375,6 +404,9 @@
             messageBox.classList.add('hidden');
         }
 
+        /**
+         * Sets up the initial UI state and view and listeners.
+         */
         function initDemo() {
             
             if (API_KEY === "") {
@@ -394,7 +426,12 @@
 
         // --- GEMINI CONTENT MODERATION ---
 
+        /**
+         * Calls the Gemini API to moderate the content and return a structured JSON response.
+         */
         async function moderateContent(combinedContent) {
+            // Note: The AI sees the raw content to evaluate the original intent, 
+            // even if the displayed content is censored.
             const systemPrompt = "You are an expert social media content moderator. Your task is to analyse the following user-submitted post (including the username) for violations of community guidelines, specifically focusing on hate speech, harassment, graphic violence, and self-harm content. Assign a safety status (is_safe) and list any categories flagged. Always provide a brief justification in 'moderator_comment'. Always respond strictly in the requested JSON format.";
 
             const userQuery = `Analalyse the complete user submission:\n\n${combinedContent}`;
@@ -447,10 +484,9 @@
                 return;
             }
 
-            const rawUsername = postUsernameInput.value.trim();
-            const rawPostContent = postContentInput.value.trim(); 
+            const rawUsername = postUsernameInput.value.trim(); // Raw for AI moderation and Admin Log
+            const rawPostContent = postContentInput.value.trim(); // Raw for AI moderation and Admin Log
             
-            // FIX: Validation Check (Request 3)
             if (rawUsername.length < 1) {
                 showMessage('warning', 'Username Required', "Please enter a username.");
                 postUsernameInput.focus();
@@ -468,28 +504,35 @@
             
             const moderationTime = new Date();
 
+            // Combine raw username and content for AI moderation
             const combinedAiInput = `Username: ${rawUsername}\nComment: ${rawPostContent}`;
 
+            // Apply censorship for Public display
             const censoredUsername = censorText(rawUsername);
             const censoredPostContent = censorText(rawPostContent);
 
             try {
+                // 1. Moderate Content (Use combined raw input for the AI call)
                 const moderationResult = await moderateContent(combinedAiInput);
 
+                // 2. Log the result (Store both raw and censored versions)
                 const logEntry = {
-                    rawContent: rawPostContent,       
-                    rawUsername: rawUsername,         
-                    censoredContent: censoredPostContent, 
-                    censoredUsername: censoredUsername,   
+                    rawContent: rawPostContent,       // Uncensored content for Admin Log
+                    rawUsername: rawUsername,         // Uncensored username for Admin Log
+                    censoredContent: censoredPostContent, // Censored content for Public Feed
+                    censoredUsername: censoredUsername,   // Censored username for Public Feed
                     ip_address: generateMockIP(),
                     timestamp: moderationTime,
                     moderation: moderationResult
                 };
                 sessionPosts.unshift(logEntry); 
                 
+                // 3. Handle messages 
                 const isSafe = moderationResult.is_safe;
                 
                 if (currentView === 'public' && !isSafe) {
+                    // Only show alert if BLOCKING the content 
+                    console.warn("Post rejected by AI moderator:", moderationResult);
                     showMessage(
                         'error', 
                         'Comment Blocked: Violation Detected', 
@@ -505,8 +548,10 @@
                     );
                 }
                 
+                // 4. Re-render both feeds 
                 renderPosts(sessionPosts);
 
+                // Clear content input after attempt (keep username)
                 postContentInput.value = '';
 
             } catch (error) {
@@ -515,10 +560,13 @@
             } finally {
                 submitButton.disabled = false;
                 loadingIndicator.style.display = 'none';
-                postFormContainer.classList.add('hidden');
+                postFormContainer.classList.add('hidden'); // Hide the form after submission attempt
             }
         });
         
+        /**
+         * Creates the common moderation status block HTML.
+         */
         function createModerationStatusBlock(post) {
             const isSafe = post.moderation.is_safe;
             const statusColor = isSafe ? 'text-green-600' : 'text-red-600';
@@ -535,6 +583,9 @@
             `;
         }
         
+        /**
+         * Creates the Admin Log text entry element for dynamic comments, using RAW content.
+         */
         function createAdminLogEntryElement(post) {
             const timestampText = post.timestamp.toLocaleString('en-GB');
             const isSafe = post.moderation.is_safe;
@@ -546,18 +597,20 @@
             adminElement.innerHTML = `
                 <div class="flex justify-between items-center mb-1">
                     <div class="font-semibold text-gray-700 text-base">
-                        ${post.rawUsername} (Comment) 
-                    </div>
+                        ${post.rawUsername} (Comment) </div>
                     <span class="text-xs text-gray-500">${timestampText}</span>
                 </div>
                 <div class="text-xs text-gray-500 mb-3">IP: ${post.ip_address || 'N/A'}</div> 
-                <p class="text-gray-900 mb-4 whitespace-pre-wrap">${post.rawContent}</p> 
-                ${createModerationStatusBlock(post)}
+                <p class="text-gray-900 mb-4 whitespace-pre-wrap">${post.rawContent}</p> ${createModerationStatusBlock(post)}
             `;
             return adminElement;
         }
 
+        /**
+         * Renders the posts for both public and admin views.
+         */
         function renderPosts(posts) {
+            // Clear dynamic content (comments)
             if (commentsList) {
                 commentsList.innerHTML = '';
             }
@@ -566,26 +619,29 @@
             publicFeedStatus.classList.add('hidden');
             adminFeedStatus.classList.add('hidden');
 
+            // 1a. Render the Static Media Post Log Details 
             const adminStaticLogDetails = document.getElementById('admin-static-log-details');
             if (adminStaticLogDetails) {
                 adminStaticLogDetails.innerHTML = createModerationStatusBlock(STATIC_MEDIA_POST_LOG);
             }
             
+            // 1b. Render all dynamic posts (comments)
             posts.forEach(post => {
+                // Admin Log Entry for dynamic comments (uses RAW content)
                 adminPostsContainer.appendChild(createAdminLogEntryElement(post));
 
+                // Public Feed Entry (if safe and commentsList exists)
                 if (post.moderation.is_safe && commentsList) {
                     const publicCommentElement = document.createElement('div');
                     publicCommentElement.className = `text-sm pl-2 border-l-2 border-gray-200`; 
                     publicCommentElement.innerHTML = `
-                        <span class="font-bold text-gray-800">${post.censoredUsername}</span> 
-                        <span class="text-gray-700">${post.censoredContent}</span> 
-                        <span class="text-xs text-gray-400 block">${post.timestamp.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
+                        <span class="font-bold text-gray-800">${post.censoredUsername}</span> <span class="text-gray-700">${post.censoredContent}</span> <span class="text-xs text-gray-400 block">${post.timestamp.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}</span>
                     `;
                     commentsList.appendChild(publicCommentElement);
                 }
             });
             
+            // Update feed status messages
             if (posts.length === 0) {
                 adminFeedStatus.classList.remove('hidden');
             }
