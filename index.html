@@ -114,8 +114,8 @@
                             <a href="https://www.instagram.com/explore/tags/TooMuchAle/" target="_blank" class="hover:underline text-blue-500">#TooMuchAle</a> 
                             <a href="https://www.instagram.com/explore/tags/CantRememberThis/" target="_blank" class="hover:underline text-blue-500">#CantRememberThis</a> 
                             <a href="https://www.instagram.com/explore/tags/BestMenFail/" target="_blank" class="hover:underline text-blue-500">#BestMenFail</a>
-                            <a href="https://www.instagram.com/explore/tags/StagDoUK/" target="_blank" class="hover:underline text-blue-500">#StagDoUK</a>
-                            <a href="https://www.instagram.com/explore/tags/WeddingSoon/" target="_blank" class="hover:underline text-blue-500">#WeddingSoon</a>
+                            <a href="https://www.instagram.com/explore/tags/StagDoUK/" target="_blank" class="hover:underline text-blue-500">#StagOrBachelor</a>
+                            <a href="https://www.instagram.com/explore/tags/WeddingSoon/" target="_blank" class="hover:underline text-blue-500">#FeelingCuteMightDeleteLater</a>
                         </p>
                     </div>
 
@@ -137,7 +137,7 @@
 
                 <div id="post-form-container" class="bg-white p-6 rounded-xl shadow-lg mb-8 hidden max-w-lg mx-auto">
                     <form id="post-form" class="space-y-4">
-                        <input type="text" id="post-username" placeholder="IMissMSN88" value=""
+                        <input type="text" id="post-username" placeholder="Your Username (e.g., IMissMSN88)" value=""
                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
                         <textarea id="post-content" rows="3" placeholder="What's on your mind? Try posting something safe, or something that violates common community guidelines for moderation demo..."
                                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150 resize-none"></textarea>
@@ -539,7 +539,7 @@
                 const isSafe = moderationResult.is_safe;
                 
                 if (currentView === 'public' && !isSafe) {
-                    // Only show alert if BLOCKING the content 
+                    // Only show alert if BLOCKING the content (as requested)
                     console.warn("Post rejected by AI moderator:", moderationResult);
                     showMessage(
                         'error', 
@@ -547,9 +547,8 @@
                         `Your comment was blocked due to: ${moderationResult.moderator_comment}`, 
                         moderationResult.categories_flagged
                     );
-                } else if (currentView === 'public' && isSafe) {
-                     showMessage('success', 'Comment Approved!', `Your comment was successfully approved and posted.`);
-                }
+                } 
+                // REQUEST IMPLEMENTED: Success message removed here.
                 
                 // 4. Re-render both feeds 
                 renderPosts(sessionPosts);
