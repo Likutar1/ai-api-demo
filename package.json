@@ -1,0 +1,19 @@
+{
+  "name": "gemini-moderation-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^1.25.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "git": "^0.1.5"
+  }
+}
