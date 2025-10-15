@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
-    
+
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f7f9fb; }
         .post-card {
@@ -82,9 +82,9 @@
 
                     <div class="mt-3">
                         <div class="flex items-center space-x-4 text-2xl mb-2">
-                            <button id="like-button" class="text-red-500 hover:text-red-700 transition duration-150">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 fill-current" viewBox="0 0 24 24" width="24" height="24">
-                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            <button id="like-button" class="text-gray-500 hover:text-red-500 transition duration-150">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
                             </button>
                             <button id="comment-button" class="text-gray-500 hover:text-blue-500 transition duration-150">
@@ -137,7 +137,7 @@
 
                 <div id="post-form-container" class="bg-white p-6 rounded-xl shadow-lg mb-8 hidden max-w-lg mx-auto">
                     <form id="post-form" class="space-y-4">
-                        <input type="text" id="post-username" placeholder="Your Username (e.g., JaneDoe123)" value="Guest"
+                        <input type="text" id="post-username" placeholder="IMissMSN88" value=""
                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150">
                         <textarea id="post-content" rows="3" placeholder="What's on your mind? Try posting something safe, or something that violates common community guidelines for moderation demo..."
                                     class="w-full p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150 resize-none"></textarea>
@@ -207,8 +207,8 @@
     </div>
 
     <script type="module">
-        // --- API KEY CONFIGURATION ---
-        const API_KEY = "AIzaSyCDuWhLwFqRc62Yx_uTydebngEJmDAzl0Q"; 
+        // --- API KEY CONFIGURATION (Removed and moved to Vercel API Route) ---
+        // const API_KEY = "..."; // REMOVED FOR SECURITY
 
         // --- GLOBAL SETUP ---
         /**
@@ -230,7 +230,8 @@
             return v.toString(16);
         });
         
-        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+        // MODIFICATION: Changed API URL to a Vercel API Route (e.g., /api/moderate-content)
+        const MODERATION_API_URL = '/api/moderate-content'; 
         
         const loadingIndicator = document.getElementById('loading-indicator');
         const postForm = document.getElementById('post-form'); 
@@ -326,6 +327,7 @@
             let currentLikes = parseInt(currentLikesText) || 0;
             currentLikes += 1;
             
+            // Use GB English for number formatting as requested in user guidelines
             const newLikesText = currentLikes.toLocaleString('en-GB');
             
             // Update Public Tally
@@ -336,9 +338,14 @@
                 adminLikeCountSpan.textContent = newLikesText;
             }
 
+            // MODIFICATION: Add classes for the 'liked' filled state
             likeButton.classList.add('liked'); 
-            likeButton.classList.add('scale-125', 'text-red-700');
-            likeButton.classList.remove('text-red-500');
+            likeButton.classList.add('scale-125', 'text-red-700', 'fill-current');
+            likeButton.classList.remove('text-gray-500', 'hover:text-red-500');
+            // Change the SVG back to the filled version (path-based heart)
+            likeButton.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 fill-current" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>`;
 
             setTimeout(() => {
                 likeButton.classList.remove('scale-125');
@@ -442,13 +449,10 @@
          */
         function initDemo() {
             
-            if (API_KEY === "") {
-                showMessage('error', 'Configuration Error', 'The Gemini API Key is missing. Please edit the script to insert your valid key before posting.', ['API Key Required']);
-                submitButton.disabled = true;
-            } else {
-                submitButton.disabled = false;
-                messageBox.classList.add('hidden');
-            }
+            // Since API Key is now on the server, we assume the route exists and is functional
+            // No client-side key check needed, but we keep the button enabled for posting attempt
+            submitButton.disabled = false;
+            messageBox.classList.add('hidden');
 
             if (likeButton) { likeButton.addEventListener('click', handleLikeClick); }
             if (commentButton) { commentButton.addEventListener('click', handleCommentClick); }
@@ -457,52 +461,29 @@
             handleViewChange();
         }
 
-        // --- GEMINI CONTENT MODERATION ---
+        // --- GEMINI CONTENT MODERATION (via Serverless Function) ---
 
         /**
-         * Calls the Gemini API to moderate the content and return a structured JSON response.
+         * Calls the Vercel API Route to moderate the content securely.
          */
         async function moderateContent(combinedContent) {
-            // Note: The AI sees the raw content to evaluate the original intent, 
-            // even if the displayed content is censored.
-            const systemPrompt = "You are an expert social media content moderator. Your task is to analyse the following user-submitted post (including the username) for violations of community guidelines, specifically focusing on hate speech, harassment, graphic violence, and self-harm content. Assign a safety status (is_safe) and list any categories flagged. Always provide a brief justification in 'moderator_comment'. Always respond strictly in the requested JSON format.";
-
-            const userQuery = `Analalyse the complete user submission:\n\n${combinedContent}`;
-
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: {
-                    parts: [{ text: systemPrompt }]
-                },
-                generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            is_safe: { type: "BOOLEAN", description: "True if the post is compliant with all guidelines (safe), false if any guidelines are violated (flagged)." },
-                            categories_flagged: { type: "ARRAY", description: "A list of strings containing all high-risk categories detected (e.g., 'Hate Speech', 'Harassment', 'Graphic Violence', 'Self-Harm'). Return an empty array if the post is safe.", items: { type: "STRING" } },
-                            moderator_comment: { type: "STRING", description: "A brief, concise justification for the safety determination." }
-                        },
-                        required: ["is_safe", "categories_flagged", "moderator_comment"],
-                        propertyOrdering: ["is_safe", "categories_flagged", "moderator_comment"]
-                    }
-                }
-            };
-
+            
             const options = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                // MODIFICATION: Pass only the user input to the server
+                body: JSON.stringify({ userContent: combinedContent }) 
             };
 
-            const result = await tryCatchFetch(GEMINI_API_URL, options);
+            // MODIFICATION: Call the local Vercel API Route
+            const result = await tryCatchFetch(MODERATION_API_URL, options);
             
-            const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!jsonText) {
-                throw new Error("Gemini API returned no structured content. Check console for full API error.");
+            // The result from the API Route should be the structured JSON directly
+            if (result.error) {
+                throw new Error(`Server Moderation Error: ${result.error}`);
             }
-            
-            return JSON.parse(jsonText);
+
+            return result; // This is the structured moderation JSON
         }
 
         // --- POST MANAGEMENT AND RENDERING ---
@@ -512,21 +493,17 @@
             
             messageBox.classList.add('hidden'); 
 
-            if (API_KEY === "") {
-                showMessage('error', 'API Key Missing', 'Please insert your Gemini API Key into the script to enable moderation.');
-                return;
-            }
-
-            const rawUsername = postUsernameInput.value.trim() || 'Guest'; // Raw for AI moderation and Admin Log
+            const rawUsername = postUsernameInput.value.trim(); // Raw for AI moderation and Admin Log
             const rawPostContent = postContentInput.value.trim(); // Raw for AI moderation and Admin Log
             
+            // MODIFICATION: Check for empty username and content
             if (rawUsername.length < 1) {
                 showMessage('warning', 'Username Required', "Please enter a username.");
                 return;
             }
 
             if (rawPostContent.length < 1) { 
-                showMessage('warning', 'Post Too Short', "Please write a longer post (minimum 1 character).");
+                showMessage('warning', 'Post Content Required', "Please write a post (minimum 1 character).");
                 return;
             }
             
@@ -543,7 +520,7 @@
             const censoredPostContent = censorText(rawPostContent);
 
             try {
-                // 1. Moderate Content (Use combined raw input for the AI call)
+                // 1. Moderate Content (Use combined raw input for the AI call via Serverless function)
                 const moderationResult = await moderateContent(combinedAiInput);
 
                 // 2. Log the result (Store both raw and censored versions)
@@ -570,7 +547,9 @@
                         `Your comment was blocked due to: ${moderationResult.moderator_comment}`, 
                         moderationResult.categories_flagged
                     );
-                } 
+                } else if (currentView === 'public' && isSafe) {
+                     showMessage('success', 'Comment Approved!', `Your comment was successfully approved and posted.`);
+                }
                 
                 // 4. Re-render both feeds 
                 renderPosts(sessionPosts);
@@ -580,7 +559,8 @@
 
             } catch (error) {
                 console.error("CRITICAL API/NETWORK ERROR:", error);
-                showMessage('error', 'Submission Failed', `An error occurred: ${error.message}. Please check your browser console (F12) for network details.`);
+                // Note: This error message is updated to reflect the Vercel API Route setup
+                showMessage('error', 'Submission Failed', `A network or server error occurred: ${error.message}. Ensure your Vercel API Route is correctly configured.`);
             } finally {
                 submitButton.disabled = false;
                 loadingIndicator.style.display = 'none';
@@ -611,6 +591,7 @@
          * Creates the Admin Log text entry element for dynamic comments, using RAW content.
          */
         function createAdminLogEntryElement(post) {
+            // Use GB English for date formatting as requested in user guidelines
             const timestampText = post.timestamp.toLocaleString('en-GB');
             const isSafe = post.moderation.is_safe;
             
