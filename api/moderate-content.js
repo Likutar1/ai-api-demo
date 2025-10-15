@@ -1,47 +1,62 @@
-// /ai-api-demo/api/moderation.js
-import { GoogleGenerativeAI } from "@google/genai";
+// Change 'GoogleGenerativeAI' to 'GoogleGenAI'
+import { GoogleGenAI } from '@google/genai';
 
-// API Key is fetched securely from Vercel's environment variables
-const apiKey = process.env.GEMINI_API_KEY; 
-const ai = new GoogleGenerativeAI(apiKey);
+// The API key is securely accessed from the Vercel Environment Variables
+const ai = new GoogleGenAI(process.env.GEMINI_API_KEY); 
 
-// This is the system instruction defined in your client-side script
+// The system prompt and structured schema are now on the server
 const systemPrompt = "You are an expert social media content moderator. Your task is to analyse the following user-submitted post (including the username) for violations of community guidelines, specifically focusing on hate speech, harassment, graphic violence, and self-harm content. Assign a safety status (is_safe) and list any categories flagged. Always provide a brief justification in 'moderator_comment'. Always respond strictly in the requested JSON format.";
 
-export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).send({ message: 'Only POST requests allowed' });
+const responseSchema = {
+    type: "OBJECT",
+    properties: {
+        is_safe: { type: "BOOLEAN", description: "True if the post is compliant with all guidelines (safe), false if any guidelines are violated (flagged)." },
+        categories_flagged: { type: "ARRAY", description: "A list of strings containing all high-risk categories detected (e.g., 'Hate Speech', 'Harassment', 'Graphic Violence', 'Self-Harm'). Return an empty array if the post is safe.", items: { type: "STRING" } },
+        moderator_comment: { type: "STRING", description: "A brief, concise justification for the safety determination." }
+    },
+    required: ["is_safe", "categories_flagged", "moderator_comment"],
+};
+
+
+export default async function handler(request, response) {
+    if (request.method !== 'POST') {
+        return response.status(405).json({ error: 'Method Not Allowed' });
+    }
+    
+    // Check for the environment variable
+    if (!process.env.GEMINI_API_KEY) {
+        return response.status(500).json({ error: 'Server configuration error: GEMINI_API_KEY environment variable is missing.' });
+    }
+
+    const { userContent } = request.body;
+
+    if (!userContent) {
+        return response.status(400).json({ error: 'Missing userContent in request body.' });
     }
 
     try {
-        // Vercel handles body parsing
-        const { combinedContent } = req.body; 
-
-        const response = await ai.models.generateContent({
-            model: "gemini-2.5-flash-preview-05-20",
-            contents: [{ parts: [{ text: combinedContent }] }],
+        const result = await ai.models.generateContent({
+            model: 'gemini-2.5-flash', // You can use gemini-2.5-flash or similar
+            contents: [{ parts: [{ text: userContent }] }],
             config: {
-                systemInstruction: { parts: [{ text: systemPrompt }] },
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
                 responseMimeType: "application/json",
-                responseSchema: {
-                    type: "OBJECT",
-                    properties: {
-                        is_safe: { type: "BOOLEAN" },
-                        categories_flagged: { type: "ARRAY", items: { type: "STRING" } },
-                        moderator_comment: { type: "STRING" }
-                    },
-                    required: ["is_safe", "categories_flagged", "moderator_comment"]
-                }
+                responseSchema: responseSchema
             }
         });
 
-        const jsonText = response.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!jsonText) throw new Error("API returned no structured content.");
-
-        res.status(200).json(JSON.parse(jsonText));
+        const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!jsonText) {
+            return response.status(500).json({ error: "Gemini API returned no structured content." });
+        }
+        
+        // Return the parsed JSON directly to the client
+        return response.status(200).json(JSON.parse(jsonText));
 
     } catch (error) {
-        console.error("API Error:", error);
-        res.status(500).json({ error: "Failed to process moderation request.", details: error.message });
+        console.error('Gemini API Error:', error);
+        return response.status(500).json({ error: `Failed to moderate content: ${error.message}` });
     }
 }
